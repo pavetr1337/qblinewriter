@@ -110,6 +110,8 @@
             ctx.strokeStyle = "blue";
             ctx.stroke();
             qbasicOut.value += "LINE("+Math.round(last.x)+","+Math.round(last.y)+")-("+Math.round(l.x)+","+Math.round(l.y)+"),1\n";
+            var uniqueLines = [...new Set(qbasicOut.value.split('\n'))];
+            qbasicOut.value = uniqueLines.join('\n');
           }
         }
       }
