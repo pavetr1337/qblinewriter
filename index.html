@@ -51,6 +51,12 @@
       drawChart();
     });
 
+    function deleteLastLine(){
+     var string = qbasicOut.value;
+     var new_string = string.replace(/\r?\n.?*$/, '');
+     qbasicOut.value = new_string;
+}
+
     sterge.addEventListener("click", e => {
       //when sterge is clicked the last point from the last array is deleted
       if (ry[ry.length - 1].length > 0) {
@@ -68,7 +74,7 @@
       drawChart();
       var uniqueLines = [...new Set(qbasicOut.value.split('\n'))];
       qbasicOut.value = uniqueLines.join('\n');
-      qbasicOut.value = qbasicOut.value.substring(0,qbasicOut.value.length-1);
+      deleteLastLine();
     });
     dreapta.addEventListener("click", e => {
       //when dreapta is clicked, a new array is pushed into the ry
