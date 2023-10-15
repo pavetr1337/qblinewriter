@@ -68,7 +68,7 @@
       drawChart();
       var uniqueLines = [...new Set(qbasicOut.value.split('\n'))];
       qbasicOut.value = uniqueLines.join('\n');
-      qbasicOut.value = qbasicOut.value.substring(0, qbasicOut.value.lastIndexOf('\n'));
+      qbasicOut.value = qbasicOut.value.substring(0,qbasicOut.value.length-1);
     });
     dreapta.addEventListener("click", e => {
       //when dreapta is clicked, a new array is pushed into the ry
