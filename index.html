@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>qBasic Paint</title>
+</head>
+<body>
+  <canvas id="myCanvas"></canvas>
+  <p><input type="button" value="Place Dot" id="dreapta" /> 
+  <input type="button" value="Undo" id="sterge" />
+  <input type="button" value="Format" id="formatLine" />
+  </p>
+  <textarea id="qbasicOut" cols="40" rows="5" placeholder="qBasic output" readonly></textarea>
+  <script>
+    var ry = [[]];
+    var canvas = document.querySelector("#myCanvas");
+    let w = (canvas.width = 600);
+    let h = (canvas.height = 200);
+
+    var ctx = canvas.getContext("2d");
+
+    drawGrid();
+
+
+
+    myCanvas.addEventListener("click", e => {
+      var offset = canvas.getBoundingClientRect();
+      var x = e.clientX - offset.left;
+      var y = e.clientY - offset.top;
+      //a new point is pushed on the last array of ry
+      ry[ry.length - 1].push({ x: x, y: y });
+      // delete everything
+      ctx.clearRect(0, 0, w, h);
+      // draw everything
+      drawGrid();
+      drawChart();
+    });
+
+    sterge.addEventListener("click", e => {
+      //when sterge is clicked the last point from the last array is deleted
+      if (ry[ry.length - 1].length > 0) {
+        ry[ry.length - 1].pop();
+      } else {
+        //if the last array is empty I delete this array 
+        ry.pop();
+        //and then I delete the last point from the last array
+        ry[ry.length - 1].pop();
+      }
+      // delete everything
+      ctx.clearRect(0, 0, w, h);
+      // draw everything
+      drawGrid();
+      drawChart();
+    });
+
+    dreapta.addEventListener("click", e => {
+      //when dreapta is clicked, a new array is pushed into the ry
+      ry.push([]);
+    });
+    const qbasicOut = document.getElementById('qbasicOut');
+
+    formatLine.addEventListener("click", e => {
+      var uniqueLines = [...new Set(qbasicOut.value.split('\n'))];
+      qbasicOut.value = uniqueLines.join('\n');
+    });
+
+    function drawGrid() {
+      ctx.strokeStyle = "black";
+      ctx.lineWidth = 0.1;
+      ctx.beginPath();
+      for (x = 15; x <= w; x += 60) {
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, h);
+        for (y = 20; y <= h; y += 20) {
+          ctx.moveTo(0, y);
+          ctx.lineTo(w, y);
+        }
+      }
+      ctx.stroke();
+    }
+    function drawChart() {
+      ctx.lineWidth = 1;
+      // for every array in the ry array
+      for (let index = 0; index < ry.length; index++) {
+        // for every point in the ry[index]
+        for (let i = 0; i < ry[index].length; i++) {
+          let l = ry[index][i];
+          // draw the circle
+          drawCircle(l.x, l.y);
+          // draw the line
+          if (i > 0) {
+            let last = ry[index][i - 1];
+            ctx.beginPath();
+            ctx.moveTo(last.x, last.y);
+            ctx.lineTo(l.x, l.y);
+            ctx.strokeStyle = "blue";
+            ctx.stroke();
+            qbasicOut.value += "LINE("+last.x+","+last.y+")-("+l.x+","+l.y+"),1\n";
+          }
+        }
+      }
+    }
+
+    function drawCircle(x, y) {
+      ctx.beginPath();
+      ctx.arc(x, y, 6, 0, Math.PI * 2);
+      ctx.strokeStyle = "red";
+      ctx.stroke();
+    }
+  </script>
+</body>
+</html>
