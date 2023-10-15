@@ -26,6 +26,7 @@
   <textarea class="form-control" id="qbasicOut" cols="40" rows="5" placeholder="qBasic output" style="width: 50%" readonly></textarea>
   <br><br><br><br><br>
   <script>
+    const qbasicOut = document.getElementById('qbasicOut');
     var ry = [[]];
     var canvas = document.querySelector("#myCanvas");
     let w = (canvas.width = 600);
@@ -65,13 +66,14 @@
       // draw everything
       drawGrid();
       drawChart();
+      var uniqueLines = [...new Set(qbasicOut.value.split('\n'))];
+      qbasicOut.value = uniqueLines.join('\n');
+      qbasicOut.value = qbasicOut.value.substring(0, qbasicOut.value.lastIndexOf('\n'));
     });
-
     dreapta.addEventListener("click", e => {
       //when dreapta is clicked, a new array is pushed into the ry
       ry.push([]);
     });
-    const qbasicOut = document.getElementById('qbasicOut');
 
     formatLine.addEventListener("click", e => {
       var uniqueLines = [...new Set(qbasicOut.value.split('\n'))];
